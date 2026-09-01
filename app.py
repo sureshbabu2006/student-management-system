@@ -260,6 +260,61 @@ def attendance():
         students=students,
         selected_date=selected_date
     )
+@app.route("/marks", methods=["GET", "POST"])
+def marks():
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    subject = (
+        request.form.get("subject")
+        if request.method == "POST"
+        else request.args.get("subject", "")
+    )
+
+    connection = get_db_connection()
+
+    students = connection.execute("""
+        SELECT * FROM students
+        ORDER BY name ASC
+    """).fetchall()
+
+    if request.method == "POST" and subject:
+
+        for student in students:
+
+            marks_value = request.form.get(
+                f"marks_{student['id']}"
+            )
+
+            if marks_value:
+                connection.execute("""INSERT INTO marks(student_id, subject, marks, max_marks)VALUES (?, ?, ?, 100)
+                  ON CONFLICT(student_id, subject)
+                 DO UPDATE SET marks = excluded.marks """, (student["id"], subject,marks_value
+                 ))
+
+        connection.commit()
+
+    saved_marks = {}
+
+    if subject:
+        rows = connection.execute("""
+            SELECT student_id, marks
+            FROM marks
+            WHERE subject = ?
+        """, (subject,)).fetchall()
+
+        for row in rows:
+            saved_marks[row["student_id"]] = row["marks"]
+
+    connection.close()
+
+    return render_template(
+        "marks.html",
+        students=students,
+        subject=subject,
+        saved_marks=saved_marks
+    )
 @app.route("/logout")
 def logout():
 

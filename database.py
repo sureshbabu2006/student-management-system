@@ -37,7 +37,8 @@ def create_database():
             address TEXT
         )
     """)
-        # Attendance table
+
+    # Attendance table
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS attendance (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -48,6 +49,20 @@ def create_database():
             FOREIGN KEY(student_id) REFERENCES students(id)
         )
     """)
+
+    # Marks table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS marks (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_id INTEGER NOT NULL,
+            subject TEXT NOT NULL,
+            marks INTEGER NOT NULL,
+            max_marks INTEGER NOT NULL DEFAULT 100,
+            UNIQUE(student_id, subject),
+            FOREIGN KEY(student_id) REFERENCES students(id)
+        )
+    """)
+
     connection.commit()
     connection.close()
 

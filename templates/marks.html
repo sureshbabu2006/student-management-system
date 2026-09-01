@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Marks - Student Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <header class="dashboard-header">
+
+            <div>
+                <h1>Student Management System</h1>
+                <p>Welcome, {{ session["username"] }}!</p>
+            </div>
+
+            <a href="{{ url_for('logout') }}" class="logout-btn">
+                Logout
+            </a>
+
+        </header>
+
+        <main>
+
+            <h2>Marks Management</h2>
+
+            <!-- Select Subject -->
+
+            <form method="GET"
+                  action="{{ url_for('marks') }}">
+
+                <label for="subject">
+                    Subject:
+                </label>
+
+                <select id="subject"
+                        name="subject"
+                        required>
+
+                    <option value="">
+                        Select Subject
+                    </option>
+
+                    <option value="Mathematics">
+                        Mathematics
+                    </option>
+
+                    <option value="Physics">
+                        Physics
+                    </option>
+
+                    <option value="Chemistry">
+                        Chemistry
+                    </option>
+
+                    <option value="Computer Science">
+                        Computer Science
+                    </option>
+
+                </select>
+
+                <button type="submit">
+                    Load Marks
+                </button>
+
+            </form>
+
+
+            {% if students and subject %}
+
+            <hr>
+
+            <h3>
+                Marks for {{ subject }}
+            </h3>
+
+
+            <!-- Save Marks -->
+
+            <form method="POST"
+                  action="{{ url_for('marks') }}">
+
+                <input type="hidden"
+                       name="subject"
+                       value="{{ subject }}">
+
+
+                {% for student in students %}
+
+                <div>
+
+                    <strong>
+                        {{ student["student_id"] }}
+                        -
+                        {{ student["name"] }}
+                    </strong>
+
+                    <label>
+                        Marks:
+
+                        <input type="number"
+       name="marks_{{ student['id'] }}"
+       value="{{ saved_marks.get(student['id'], '') }}"
+       min="0"
+       max="100"
+       placeholder="Enter marks"
+       required>
+       {% if saved_marks.get(student['id']) is not none %}
+
+<p>
+    Marks:
+    <strong>{{ saved_marks.get(student['id']) }}/100</strong>
+</p>
+
+<p>
+    Percentage:
+    <strong>{{ saved_marks.get(student['id']) }}%</strong>
+</p>
+
+{% endif %}
+                    </label>
+
+                </div>
+
+                <br>
+
+                {% endfor %}
+
+
+                <button type="submit">
+                    Save Marks
+                </button>
+
+            </form>
+
+            {% elif not students %}
+
+                <p>No students have been added yet.</p>
+
+            {% endif %}
+
+
+            <br>
+
+            <a href="{{ url_for('dashboard') }}">
+                ← Back to Dashboard
+            </a>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>
