@@ -53,7 +53,26 @@ def dashboard():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    return render_template("dashboard.html")
+    connection = get_db_connection()
+
+    total_students = connection.execute(
+        "SELECT COUNT(*) FROM students"
+    ).fetchone()[0]
+    total_attendance = connection.execute(
+    "SELECT COUNT(*) FROM attendance"
+     ).fetchone()[0]
+    total_marks = connection.execute(
+    "SELECT COUNT(*) FROM marks"
+).fetchone()[0]
+
+    connection.close()
+
+    return render_template(
+    "dashboard.html",
+    total_students=total_students,
+    total_attendance=total_attendance,
+    total_marks=total_marks
+)
 @app.route("/students")
 def students():
 
