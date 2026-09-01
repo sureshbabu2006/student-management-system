@@ -115,6 +115,28 @@ def students():
         students=students,
         search=search
     )
+@app.route("/students/view/<int:id>")
+def view_student(id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    connection = get_db_connection()
+
+    student = connection.execute(
+        "SELECT * FROM students WHERE id = ?",
+        (id,)
+    ).fetchone()
+
+    connection.close()
+
+    if student is None:
+        return "Student not found", 404
+
+    return render_template(
+        "student_details.html",
+        student=student
+    )
 @app.route("/students/add", methods=["GET", "POST"])
 def add_student():
 

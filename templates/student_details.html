@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Details</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <header class="dashboard-header">
+
+            <div>
+                <h1>Student Management System</h1>
+                <p>Welcome, {{ session["username"] }}!</p>
+            </div>
+
+            <a href="{{ url_for('logout') }}" class="logout-btn">
+                Logout
+            </a>
+
+        </header>
+
+        <main>
+
+            <h2>Student Details</h2>
+
+            <p>
+                <strong>Student ID:</strong>
+                {{ student["student_id"] }}
+            </p>
+
+            <p>
+                <strong>Name:</strong>
+                {{ student["name"] }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ student["email"] }}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ student["phone"] }}
+            </p>
+
+            <p>
+                <strong>Course:</strong>
+                {{ student["course"] }}
+            </p>
+
+            <p>
+                <strong>Year:</strong>
+                {{ student["year"] }}
+            </p>
+
+            <p>
+                <strong>Date of Birth:</strong>
+                {{ student["date_of_birth"] }}
+            </p>
+
+            <p>
+                <strong>Address:</strong>
+                {{ student["address"] }}
+            </p>
+
+            <br>
+
+            <a href="{{ url_for('students') }}">
+                ← Back to Students
+            </a>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>
