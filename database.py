@@ -37,7 +37,17 @@ def create_database():
             address TEXT
         )
     """)
-
+        # Attendance table
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS attendance (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            student_id INTEGER NOT NULL,
+            date TEXT NOT NULL,
+            status TEXT NOT NULL CHECK(status IN ('Present', 'Absent')),
+            UNIQUE(student_id, date),
+            FOREIGN KEY(student_id) REFERENCES students(id)
+        )
+    """)
     connection.commit()
     connection.close()
 

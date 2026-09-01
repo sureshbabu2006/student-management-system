@@ -215,7 +215,51 @@ def delete_student(id):
     connection.close()
 
     return redirect(url_for("students"))
+@app.route("/attendance", methods=["GET", "POST"])
+def attendance():
 
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    selected_date = request.form.get("date") if request.method == "POST" else request.args.get("date", "")
+
+    connection = get_db_connection()
+
+    students = connection.execute("""
+        SELECT * FROM students
+        ORDER BY name ASC
+    """).fetchall()
+
+    if request.method == "POST" and selected_date:
+
+        for student in students:
+
+            status = request.form.get(
+                f"status_{student['id']}"
+            )
+
+            if status:
+                connection.execute("""
+                    INSERT INTO attendance
+                    (student_id, date, status)
+                    VALUES (?, ?, ?)
+                    ON CONFLICT(student_id, date)
+                    DO UPDATE SET status = excluded.status
+                """, (
+                    student["id"],
+                    selected_date,
+                    status
+                ))
+
+        connection.commit()
+
+    connection.close()
+
+    return render_template(
+        "attendance.html",
+        students=students,
+        selected_date=selected_date
+    )
 @app.route("/logout")
 def logout():
 

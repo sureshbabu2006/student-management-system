@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance - Student Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <header class="dashboard-header">
+
+            <div>
+                <h1>Student Management System</h1>
+                <p>Welcome, {{ session["username"] }}!</p>
+            </div>
+
+            <a href="{{ url_for('logout') }}" class="logout-btn">
+                Logout
+            </a>
+
+        </header>
+
+
+        <main>
+
+            <h2>Attendance</h2>
+
+
+            <!-- Select Date -->
+
+            <form method="GET"
+                  action="{{ url_for('attendance') }}">
+
+                <label for="date">
+                    Select Date:
+                </label>
+
+                <input type="date"
+                       id="date"
+                       name="date"
+                       value="{{ selected_date }}"
+                       required>
+
+                <button type="submit">
+                    Load Students
+                </button>
+
+            </form>
+
+
+            {% if students and selected_date %}
+
+            <hr>
+
+            <h3>Mark Attendance</h3>
+
+            <!-- Save Attendance -->
+
+            <form method="POST"
+                  action="{{ url_for('attendance') }}">
+
+                <input type="hidden"
+                       name="date"
+                       value="{{ selected_date }}">
+
+
+                {% for student in students %}
+
+                <div>
+
+                    <strong>
+                        {{ student["student_id"] }}
+                        -
+                        {{ student["name"] }}
+                    </strong>
+
+
+                    <label>
+                        <input type="radio"
+                               name="status_{{ student['id'] }}"
+                               value="Present"
+                               required>
+
+                        Present
+                    </label>
+
+
+                    <label>
+                        <input type="radio"
+                               name="status_{{ student['id'] }}"
+                               value="Absent">
+
+                        Absent
+                    </label>
+
+                </div>
+
+                <br>
+
+                {% endfor %}
+
+
+                <button type="submit">
+                    Save Attendance
+                </button>
+
+            </form>
+
+            {% endif %}
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>
