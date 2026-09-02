@@ -87,6 +87,7 @@
                         <input type="radio"
                                name="status_{{ student['id'] }}"
                                value="Present"
+                               {% if saved_attendance.get(student['id']) == 'Present' %}checked{% endif %}
                                required>
 
                         Present
@@ -96,9 +97,10 @@
                     <label>
                         <input type="radio"
                                name="status_{{ student['id'] }}"
-                               value="Absent">
+                               value="Absent"
+                               {% if saved_attendance.get(student['id']) == 'Absent' %}checked{% endif %}  
 
-                        Absent
+                         Absent
                     </label>
 
                 </div>

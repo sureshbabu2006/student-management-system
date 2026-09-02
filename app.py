@@ -262,7 +262,11 @@ def attendance():
     if "user_id" not in session:
         return redirect(url_for("login"))
 
-    selected_date = request.form.get("date") if request.method == "POST" else request.args.get("date", "")
+    selected_date = (
+        request.form.get("date")
+        if request.method == "POST"
+        else request.args.get("date", "")
+    )
 
     connection = get_db_connection()
 
@@ -270,6 +274,18 @@ def attendance():
         SELECT * FROM students
         ORDER BY name ASC
     """).fetchall()
+
+    saved_attendance = {}
+
+    if selected_date:
+        rows = connection.execute("""
+            SELECT student_id, status
+            FROM attendance
+            WHERE date = ?
+        """, (selected_date,)).fetchall()
+
+        for row in rows:
+            saved_attendance[row["student_id"]] = row["status"]
 
     if request.method == "POST" and selected_date:
 
@@ -294,12 +310,24 @@ def attendance():
 
         connection.commit()
 
+        saved_attendance = {}
+
+        rows = connection.execute("""
+            SELECT student_id, status
+            FROM attendance
+            WHERE date = ?
+        """, (selected_date,)).fetchall()
+
+        for row in rows:
+            saved_attendance[row["student_id"]] = row["status"]
+
     connection.close()
 
     return render_template(
         "attendance.html",
         students=students,
-        selected_date=selected_date
+        selected_date=selected_date,
+        saved_attendance=saved_attendance
     )
 @app.route("/attendance/history/<int:student_id>")
 def attendance_history(student_id):
