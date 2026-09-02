@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 from werkzeug.security import check_password_hash
+from database import create_database
 
 app = Flask(__name__)
 
 app.secret_key = "change-this-secret-key"
+create_database()
 
 
 def get_db_connection():
