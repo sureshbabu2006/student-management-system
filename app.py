@@ -394,5 +394,67 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/students/performance/<int:student_id>")
+def student_performance(student_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    connection = get_db_connection()
+
+    student = connection.execute(
+        "SELECT * FROM students WHERE id = ?",
+        (student_id,)
+    ).fetchone()
+
+    marks = connection.execute("""
+        SELECT subject, marks, max_marks
+        FROM marks
+        WHERE student_id = ?
+        ORDER BY subject ASC
+    """, (student_id,)).fetchall()
+
+    attendance = connection.execute("""
+        SELECT
+            COUNT(*) AS total_days,
+            SUM(CASE WHEN status = 'Present' THEN 1 ELSE 0 END) AS present_days
+        FROM attendance
+        WHERE student_id = ?
+    """, (student_id,)).fetchone()
+
+    connection.close()
+
+    if student is None:
+        return "Student not found", 404
+
+    total_marks = sum(row["marks"] for row in marks)
+    total_max_marks = sum(row["max_marks"] for row in marks)
+
+    percentage = (
+        (total_marks / total_max_marks) * 100
+        if total_max_marks > 0
+        else 0
+    )
+
+    total_days = attendance["total_days"] or 0
+    present_days = attendance["present_days"] or 0
+
+    attendance_percentage = (
+        (present_days / total_days) * 100
+        if total_days > 0
+        else 0
+    )
+
+    return render_template(
+        "student_performance.html",
+        student=student,
+        marks=marks,
+        percentage=percentage,
+        total_days=total_days,
+        present_days=present_days,
+        attendance_percentage=attendance_percentage
+    )
+
+
 if __name__ == "__main__":
     app.run(debug=True)

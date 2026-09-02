@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Performance</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <header class="dashboard-header">
+
+            <div>
+                <h1>Student Management System</h1>
+                <p>Welcome, {{ session["username"] }}!</p>
+            </div>
+
+            <a href="{{ url_for('logout') }}" class="logout-btn">
+                Logout
+            </a>
+
+        </header>
+
+        <main>
+
+            <h2>Student Performance Report</h2>
+
+            <h3>{{ student["name"] }}</h3>
+
+            <p>
+                Student ID:
+                <strong>{{ student["student_id"] }}</strong>
+            </p>
+
+            <hr>
+
+            <h3>Academic Performance</h3>
+
+            {% if marks %}
+
+            <table border="1" cellpadding="10">
+
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Marks</th>
+                        <th>Maximum Marks</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for mark in marks %}
+
+                    <tr>
+                        <td>{{ mark["subject"] }}</td>
+
+                        <td>{{ mark["marks"] }}</td>
+
+                        <td>{{ mark["max_marks"] }}</td>
+
+                        <td>
+                            {{ "%.1f"|format(
+                                (mark["marks"] / mark["max_marks"]) * 100
+                            ) }}%
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            <p>
+                <strong>Overall Percentage:</strong>
+                {{ "%.1f"|format(percentage) }}%
+            </p>
+
+            {% else %}
+
+            <p>No marks recorded yet.</p>
+
+            {% endif %}
+
+            <hr>
+
+            <h3>Attendance Performance</h3>
+
+            <p>
+                Total Days:
+                <strong>{{ total_days }}</strong>
+            </p>
+
+            <p>
+                Present Days:
+                <strong>{{ present_days }}</strong>
+            </p>
+
+            <p>
+                Attendance Percentage:
+                <strong>
+                    {{ "%.1f"|format(attendance_percentage) }}%
+                </strong>
+            </p>
+
+            <br>
+
+            <a href="{{ url_for('students') }}">
+                ← Back to Students
+            </a>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>
