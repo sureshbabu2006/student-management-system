@@ -51,6 +51,7 @@ student-management-system/
     ├── attendance_history.html
     ├── marks.html
     └── student_performance.html
+```text
 
 ## instalation
 1.Clone the repository:
@@ -84,3 +85,4 @@ The local database.db file is ignored by Git and is not uploaded to GitHub.
 ## Author
 
 Sureshbabu
+ 
