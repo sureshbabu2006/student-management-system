@@ -51,7 +51,8 @@ student-management-system/
     ├── attendance_history.html
     ├── marks.html
     └── student_performance.html
-Installation
+
+## instalation
 1.Clone the repository:
   git clone https://github.com/sureshbabu2006/student-management-system.git
 2.Open the project folder:
@@ -68,7 +69,8 @@ Installation
    python app.py
 8.Open the application in your browser:
    http://127.0.0.1:5000
-Database
+
+## Database
 
 The project uses SQLite for storing:
 
@@ -79,6 +81,6 @@ Marks
 
 The local database.db file is ignored by Git and is not uploaded to GitHub.
 
-Author
+## Author
 
 Sureshbabu
