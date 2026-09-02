@@ -301,6 +301,36 @@ def attendance():
         students=students,
         selected_date=selected_date
     )
+@app.route("/attendance/history/<int:student_id>")
+def attendance_history(student_id):
+
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    connection = get_db_connection()
+
+    student = connection.execute(
+        "SELECT * FROM students WHERE id = ?",
+        (student_id,)
+    ).fetchone()
+
+    attendance_records = connection.execute("""
+        SELECT date, status
+        FROM attendance
+        WHERE student_id = ?
+        ORDER BY date DESC
+    """, (student_id,)).fetchall()
+
+    connection.close()
+
+    if student is None:
+        return "Student not found", 404
+
+    return render_template(
+        "attendance_history.html",
+        student=student,
+        attendance_records=attendance_records
+    )
 @app.route("/marks", methods=["GET", "POST"])
 def marks():
 
