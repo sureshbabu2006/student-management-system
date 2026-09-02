@@ -1,6 +1,6 @@
 Student Management System
 
-A web-based Student Management System built using Python, Flask, SQLite, HTML, and CSS.
+A web-based Student Management System built using Python, Flask, SQLite, HTML, CSS and JavaScript.
 
 Features
 Admin Login and Logout
@@ -17,32 +17,78 @@ Flask
 SQLite
 HTML
 CSS
+JavaScript
 Git and GitHub
-How to Run
+Installation
 
-Clone the repository from GitHub.
+Clone the repository
 
-Install the required packages:
+git clone https://github.com/sureshbabu2006/student-management-system.git
+
+Open the project folder
+
+cd student-management-system
+
+Create a virtual environment
+
+python -m venv venv
+
+Activate the virtual environment on Windows
+
+venv\Scripts\activate
+
+Install required packages
 
 pip install flask werkzeug
 
-Create the database:
+Create the database
 
 python database.py
 
-Start the application:
+Start the application
 
 python app.py
 
-Open the application in your browser:
+Open the application
 
 http://127.0.0.1:5000
 
 Database
 
-The application uses SQLite to store student information, attendance records, marks, and user accounts.
+The project uses SQLite to store:
 
-The database.db file is kept local and is not uploaded to GitHub.
+User accounts
+Student information
+Attendance records
+Marks
+
+The local database.db file is ignored by Git and is not uploaded to GitHub.
+
+Project Structure
+
+student-management-system/
+
+├── app.py
+├── database.py
+├── README.md
+├── LICENSE
+├── .gitignore
+│
+├── static/
+│ └── css/
+│ └── style.css
+│
+└── templates/
+├── login.html
+├── dashboard.html
+├── students.html
+├── add_student.html
+├── edit_student.html
+├── student_details.html
+├── attendance.html
+├── attendance_history.html
+├── marks.html
+└── student_performance.html
 
 Author
 
